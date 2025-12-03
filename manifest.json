@@ -1,0 +1,87 @@
+{
+  "name": "Plomero Mazatlán Pro - Servicio 24/7",
+  "short_name": "Plomero CUL",
+  "description": "Servicio de plomería profesional en Mazatlán. Emergencias 24/7, destape de drenajes, reparación de fugas, instalación de sanitarios. Llegada en 30-60 min.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0066cc",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "es-MX",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icons/icon-192.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icons/icon-512.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo-plomero-mazatlan-pro.webp",
+      "sizes": "3360x1280",
+      "type": "image/webp",
+      "purpose": "any"
+    }
+  ],
+  "categories": [
+    "business",
+    "utilities"
+  ],
+  "shortcuts": [
+    {
+      "name": "WhatsApp Emergencias",
+      "short_name": "WhatsApp",
+      "description": "Contactar por WhatsApp para emergencias",
+      "url": "https://wa.me/526691325300?text=Hola%2C%20necesito%20un%20plomero%20urgente",
+      "icons": [
+        {
+          "src": "/assets/icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        },
+        {
+          "src": "/assets/icons/icon-192.webp",
+          "sizes": "192x192",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "name": "Llamar",
+      "short_name": "Teléfono",
+      "description": "Llamar al plomero",
+      "url": "tel:+526691325300",
+      "icons": [
+        {
+          "src": "/assets/icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        },
+        {
+          "src": "/assets/icons/icon-192.webp",
+          "sizes": "192x192",
+          "type": "image/webp"
+        }
+      ]
+    }
+  ]
+}

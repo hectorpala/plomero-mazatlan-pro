@@ -1,0 +1,14 @@
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Redirects 301 - Migración de estructura de carpetas
+# Fecha: 2025-01-12
+# Razón: Unificación de estructura plana en /servicios/
+
+# Redirect de landing pages locales (antiguas rutas → nuevas rutas)
+Redirect 301 /servicios/plomero/24-7/ https://plomeromazatlanpro.mx/servicios/emergencia-24-7/
+Redirect 301 /servicios/plomero/cerca-de-mi/ https://plomeromazatlanpro.mx/servicios/plomero-cerca-de-mi/
+Redirect 301 /servicios/plomero/a-domicilio/ https://plomeromazatlanpro.mx/servicios/plomero-a-domicilio/
+Redirect 301 /servicios/plomero/colonias/ https://plomeromazatlanpro.mx/servicios/plomero-colonias-mazatlan/
+Redirect 301 /servicios/plomero/precios/ https://plomeromazatlanpro.mx/servicios/plomero-precios/
