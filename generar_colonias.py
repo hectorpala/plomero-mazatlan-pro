@@ -1,54 +1,133 @@
 #!/usr/bin/env python3
 """
 Generador de páginas de colonias para Plomero Mazatlán Pro
+Estructura idéntica a Plomero Culiacán Pro
 """
 import json
 import os
 import re
 from pathlib import Path
 
-# Colonias principales de Mazatlán (las más importantes/pobladas)
-COLONIAS_PRINCIPALES = [
-    "Centro",
-    "Zona Dorada",
-    "Marina Mazatlán",
-    "Cerritos",
-    "El Cid",
-    "Sábalo Country",
-    "Gaviotas",
-    "Playas del Sol",
-    "Infonavit Playas",
-    "Lomas de Mazatlán",
-    "Lomas del Mar",
-    "Palos Prietos",
-    "Benito Juárez",
-    "Juárez",
-    "Francisco Villa",
-    "Flores Magón",
-    "López Mateos",
-    "Rafael Buelna",
-    "Villa Galaxia",
-    "Real del Valle",
-    "Real Pacífico",
-    "Pradera Dorada",
-    "Villas del Sol",
-    "Villas del Estero",
-    "Hacienda las Cruces",
-    "Marina Garden",
-    "Santa Fe",
-    "La Marina",
-    "Flamingos",
-    "Costa Brava",
-    "Villa Verde",
-    "Palmillas",
-    "Jacarandas",
-    "Los Mangos",
-    "Insurgentes",
-    "Tellería",
-    "Urías",
-    "Valle del Ejido",
-    "Las Torres",
-    "Club de Golf",
+# Colonias principales de Mazatlán con descripciones
+COLONIAS_PRINCIPALES = {
+    "Centro": {
+        "titulo": "Plomero Especializado en Centro de Mazatlán",
+        "subtitulo": "Expertos en sistemas antiguos, drenajes de hierro fundido, tuberías de galvanizado. Más de 20 años trabajando en construcciones históricas del Centro. Técnicas que preservan la arquitectura original.",
+        "experiencia": "Sistemas Antiguos del Centro",
+        "beneficios": [
+            ("🏛️", "Construcciones Históricas", "40-70 años de antigüedad"),
+            ("🔧", "Drenajes de Hierro Fundido", "Reparación especializada"),
+            ("🛠️", "Tuberías de Galvanizado", "Reemplazo y mantenimiento"),
+            ("🏠", "Técnicas Especiales", "Preservamos pisos originales"),
+            ("✅", "Garantía 6 Meses", "En todas nuestras reparaciones"),
+        ],
+        "servicios": [
+            ("Reparación de Drenajes Antiguos", "Hierro fundido, concreto, sistemas de 40+ años. Técnicas especializadas."),
+            ("Reemplazo de Tuberías", "Galvanizado a cobre/PEX. Mínima invasión, máxima durabilidad."),
+            ("Destape Profundo", "Obstrucciones severas en drenajes antiguos. Equipos especiales."),
+            ("Detección de Fugas Ocultas", "En muros antiguos sin romper acabados originales."),
+            ("Restauración de Baños Antiguos", "Preservamos azulejos originales, instalamos grifería moderna."),
+            ("Emergencias en Centro", "Atención 24/7 para fugas e inundaciones en construcciones antiguas."),
+        ],
+        "conocimiento": [
+            "Sistemas Antiguos: Drenajes de hierro fundido, tuberías de galvanizado de 40-70 años.",
+            "Construcciones Históricas: Respeto por arquitectura original, pisos de mosaico, azulejos antiguos.",
+            "Técnicas Especiales: Reparación sin destruir, detección precisa, mínima invasión.",
+            "Materiales Compatibles: Usamos materiales que respetan la antigüedad del inmueble.",
+            "Experiencia Comprobada: 20+ años trabajando en el Centro de Mazatlán.",
+        ],
+        "testimonios": [
+            ("Repararon el drenaje de mi casa de 60 años sin romper los pisos de mosaico original. Trabajo impecable.", "Don José, Centro"),
+            ("Conocen perfectamente los sistemas antiguos. Cambiaron las tuberías de galvanizado sin destrozar la casa.", "María Elena, Centro"),
+        ]
+    },
+    "Zona Dorada": {
+        "titulo": "Plomero en Zona Dorada, Mazatlán",
+        "subtitulo": "Servicio especializado para hoteles, condominios y residencias de playa. Expertos en sistemas de alta presión, bombas y problemas por salitre. Atención 24/7 para el sector turístico.",
+        "experiencia": "Zona Turística y Hotelera",
+        "beneficios": [
+            ("🏨", "Hoteles y Condominios", "Experiencia en grandes instalaciones"),
+            ("🌊", "Problemas por Salitre", "Corrosión y mantenimiento"),
+            ("💨", "Alta Presión", "Bombas y sistemas presurizados"),
+            ("🏖️", "Zona de Playa", "Atención rápida al turismo"),
+            ("✅", "Garantía 6 Meses", "En todas nuestras reparaciones"),
+        ],
+        "servicios": [
+            ("Plomería para Hoteles", "Mantenimiento preventivo y correctivo para el sector hotelero."),
+            ("Reparación de Bombas", "Instalación y reparación de sistemas de bombeo y presurización."),
+            ("Protección contra Salitre", "Tuberías y conexiones resistentes a la corrosión marina."),
+            ("Destape de Drenajes", "Servicio rápido para no afectar huéspedes y residentes."),
+            ("Fugas en Condominios", "Detección y reparación con mínima molestia a vecinos."),
+            ("Emergencias 24/7", "Atención inmediata para no afectar la operación turística."),
+        ],
+        "conocimiento": [
+            "Sector Turístico: Entendemos la urgencia de resolver problemas sin afectar huéspedes.",
+            "Condominios de Playa: Experiencia en edificios con múltiples unidades y sistemas centrales.",
+            "Corrosión Marina: Conocemos los efectos del salitre y usamos materiales resistentes.",
+            "Sistemas de Bombeo: Expertos en bombas de alta presión para edificios altos.",
+            "Disponibilidad Total: Servicio 24/7 porque el turismo no descansa.",
+        ],
+        "testimonios": [
+            ("Resolvieron una fuga en mi condominio sin molestar a los vecinos. Muy profesionales.", "Carlos, Zona Dorada"),
+            ("Atienden rápido y entienden que en un hotel no podemos tener problemas de agua.", "Gerente de Hotel, Zona Dorada"),
+        ]
+    },
+    "Marina Mazatlán": {
+        "titulo": "Plomero en Marina Mazatlán",
+        "subtitulo": "Servicio premium para residencias de lujo y condominios frente al mar. Expertos en sistemas modernos de alta gama, filtración de agua y problemas de humedad costera.",
+        "experiencia": "Residencias de Lujo",
+        "beneficios": [
+            ("🛥️", "Zona Exclusiva", "Servicio premium garantizado"),
+            ("🏢", "Condominios de Lujo", "Experiencia en acabados finos"),
+            ("💧", "Filtración de Agua", "Sistemas de purificación"),
+            ("🌅", "Frente al Mar", "Protección contra humedad"),
+            ("✅", "Garantía 6 Meses", "En todas nuestras reparaciones"),
+        ],
+        "servicios": [
+            ("Plomería de Alta Gama", "Instalación de grifería y accesorios de lujo importados."),
+            ("Sistemas de Filtración", "Instalación y mantenimiento de purificadores de agua."),
+            ("Protección contra Humedad", "Impermeabilización y drenajes para zonas costeras."),
+            ("Reparación Discreta", "Trabajamos cuidando acabados finos y privacidad."),
+            ("Mantenimiento Preventivo", "Programas de mantenimiento para residencias de lujo."),
+            ("Emergencias VIP", "Atención prioritaria 24/7 con respuesta inmediata."),
+        ],
+        "conocimiento": [
+            "Acabados de Lujo: Trabajamos con cuidado extremo en mármol, granito y acabados finos.",
+            "Marcas Premium: Experiencia con Kohler, Grohe, Hansgrohe y marcas de alta gama.",
+            "Discreción: Respetamos la privacidad de nuestros clientes en todo momento.",
+            "Ambiente Costero: Conocemos los retos de la humedad y el salitre en la zona.",
+            "Servicio Premium: Atención personalizada acorde a la exclusividad de la zona.",
+        ],
+        "testimonios": [
+            ("Instalaron mi sistema de filtración sin ningún problema. Muy profesionales y discretos.", "Residente, Marina Mazatlán"),
+            ("Excelente servicio, respetan los acabados y dejan todo impecable.", "Propietario, Marina Mazatlán"),
+        ]
+    },
+}
+
+# Colonias con datos genéricos - Lote 1 (40 colonias)
+COLONIAS_GENERICAS = [
+    "Cerritos", "El Cid", "Sábalo Country", "Gaviotas", "Playas del Sol",
+    "Infonavit Playas", "Lomas de Mazatlán", "Lomas del Mar", "Palos Prietos",
+    "Benito Juárez", "Juárez", "Francisco Villa", "Flores Magón", "López Mateos",
+    "Rafael Buelna", "Villa Galaxia", "Real del Valle", "Real Pacífico",
+    "Pradera Dorada", "Villas del Sol", "Villas del Estero", "Hacienda las Cruces",
+    "Marina Garden", "Santa Fe", "La Marina", "Flamingos", "Costa Brava",
+    "Villa Verde", "Palmillas", "Jacarandas", "Los Mangos", "Insurgentes",
+    "Tellería", "Urías", "Valle del Ejido", "Las Torres", "Club de Golf",
+]
+
+# Colonias con datos genéricos - Lote 2 (40 colonias más del JSON)
+COLONIAS_GENERICAS_2 = [
+    "Alameda", "Alborada", "Altabrisa", "Anáhuac", "Ángela Peralta",
+    "Antiguo Aeropuerto", "Antonio Toledo Corro", "Arboledas", "Azteca",
+    "Bahía", "Bicentenario", "Buenos Aires", "Café Combate", "Camarón",
+    "Campo Bello", "Campo Pesquero", "Canaco", "Casa Redonda", "Cerro del Vigía",
+    "Chapultepec", "Constitución", "Country Club", "Del Bosque", "Del Mar",
+    "Dorado", "El Castillo", "El Habal", "El Toreo", "El Venadillo",
+    "Felipe Ángeles", "Ferrocarrilera", "Genaro Estrada", "Habal Cerritos",
+    "Infonavit Alarcón", "Infonavit CTM", "Jesús García", "La Esperanza",
+    "La Sirena", "Las Gaviotas", "Libertad",
 ]
 
 def slugify(text):
@@ -65,209 +144,205 @@ def slugify(text):
     text = re.sub(r'-+', '-', text)
     return text.strip('-')
 
-def generar_pagina_colonia(nombre_colonia, codigo_postal="82000"):
-    """Genera el HTML para una página de colonia"""
-    slug = slugify(nombre_colonia)
+def generar_datos_genericos(nombre):
+    """Genera datos para colonias sin información específica"""
+    return {
+        "titulo": f"Plomero en {nombre}, Mazatlán",
+        "subtitulo": f"Servicio profesional de plomería en {nombre}. Reparación de fugas, destape de drenajes, instalación de boilers y tinacos. Llegamos en 30-60 minutos. Garantía en todos los trabajos.",
+        "experiencia": f"Colonia {nombre}",
+        "beneficios": [
+            ("🚀", "Llegada Rápida", "30-60 minutos en tu domicilio"),
+            ("🔧", "Servicio Completo", "Fugas, destapes, instalaciones"),
+            ("💰", "Precios Justos", "Cotización gratis sin compromiso"),
+            ("🕐", "24/7 Disponible", "Emergencias día y noche"),
+            ("✅", "Garantía 6 Meses", "En todas nuestras reparaciones"),
+        ],
+        "servicios": [
+            ("Reparación de Fugas", "Detectamos y reparamos fugas de agua en tuberías, llaves y conexiones."),
+            ("Destape de Drenajes", "Destapamos WC, lavabos, regaderas y drenajes principales."),
+            ("Instalación de Boiler", "Instalamos y reparamos calentadores de agua de todas las marcas."),
+            ("Instalación de Tinaco", "Colocación profesional de tinacos y cisternas."),
+            ("Reparación de WC", "Arreglamos fugas, cambio de piezas y problemas de descarga."),
+            ("Emergencias 24/7", "Atención inmediata para urgencias de plomería."),
+        ],
+        "conocimiento": [
+            f"Conocemos {nombre}: Sabemos las particularidades de las instalaciones en tu zona.",
+            "Respuesta Rápida: Llegamos en 30-60 minutos a cualquier punto de la colonia.",
+            "Precios Transparentes: Cotizamos antes de iniciar, sin sorpresas ni cargos ocultos.",
+            "Garantía Real: 6 meses de garantía en mano de obra y materiales.",
+            "Experiencia: Más de 15 años atendiendo a familias de Mazatlán.",
+        ],
+        "testimonios": [
+            (f"Llegaron rápido y resolvieron la fuga en menos de una hora. Muy recomendados.", f"Cliente satisfecho, {nombre}"),
+            (f"Precios justos y trabajo de calidad. Los volvería a llamar sin duda.", f"Vecino de {nombre}"),
+        ]
+    }
+
+def generar_pagina(nombre, datos):
+    """Genera el HTML para una página de colonia - estructura idéntica a Culiacán"""
+    slug = slugify(nombre)
+
+    # Generar beneficios HTML
+    beneficios_html = ""
+    for icon, titulo, desc in datos["beneficios"]:
+        beneficios_html += f'<div class="benefit"><div class="benefit-icon">{icon}</div><h3>{titulo}</h3><p>{desc}</p></div>'
+
+    # Generar servicios HTML
+    servicios_html = ""
+    for titulo, desc in datos["servicios"]:
+        servicios_html += f'<div class="card"><h3>{titulo}</h3><p>{desc}</p></div>'
+
+    # Generar conocimiento HTML
+    conocimiento_html = ""
+    for item in datos["conocimiento"]:
+        partes = item.split(": ", 1)
+        if len(partes) == 2:
+            conocimiento_html += f'<p><strong>✓ {partes[0]}:</strong> {partes[1]}</p>'
+        else:
+            conocimiento_html += f'<p><strong>✓</strong> {item}</p>'
+
+    # Generar testimonios HTML
+    testimonios_html = ""
+    for texto, autor in datos["testimonios"]:
+        testimonios_html += f'<div class="testimonial"><p>"{texto}"</p><cite>— {autor}</cite></div>'
 
     template = f'''<!DOCTYPE html>
 <html lang="es-MX">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plomero en {nombre_colonia}, Mazatlán | Servicio 24/7 | 669 132 5300</title>
-    <meta name="description" content="Plomero en {nombre_colonia}, Mazatlán. Servicio de plomería 24 horas: fugas, destapes, boilers, tinacos. Llegamos en 30-60 min. WhatsApp: 669 132 5300">
-
-    <!-- Favicons -->
-    <link rel="icon" href="../../../assets/icons/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" href="../../../assets/icons/favicon.png">
-    <link rel="apple-touch-icon" href="../../../assets/icons/favicon.png">
-
-    <!-- Preload critical fonts -->
-    <link rel="preload" href="../../../assets/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="../../../assets/fonts/montserrat-700.woff2" as="font" type="font/woff2" crossorigin>
-
-    <link rel="stylesheet" href="../../../styles.min.css">
-
-    <link rel="canonical" href="https://plomeromazatlanpro.mx/servicios/plomero-colonias-mazatlan/{slug}/" />
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://plomeromazatlanpro.mx/servicios/plomero-colonias-mazatlan/{slug}/" />
-    <meta property="og:title" content="Plomero en {nombre_colonia}, Mazatlán | Servicio 24/7" />
-    <meta property="og:description" content="Servicio de plomería profesional en {nombre_colonia}. Emergencias 24/7, reparaciones garantizadas." />
-    <meta property="og:image" content="https://plomeromazatlanpro.mx/assets/images/hero-plomero-visita-800w.webp" />
-    <meta property="og:locale" content="es_MX" />
-
-    <!-- JSON-LD -->
-    <script type="application/ld+json">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{datos["titulo"]} | Servicio 24/7</title>
+<meta name="description" content="Plomero en {nombre}, Mazatlán. {datos["subtitulo"][:150]}. WhatsApp: 669 132 5300">
+<link rel="icon" href="../../../assets/icons/favicon.ico" sizes="any">
+<link rel="stylesheet" href="../../../styles.min.css">
+<link rel="canonical" href="https://plomeromazatlanpro.mx/servicios/plomero-colonias-mazatlan/{slug}/" />
+<meta name="x-build" content="2025-12-03T23:00:00Z" />
+<!-- JSON-LD Schema: Solo BreadcrumbList -->
+<script type="application/ld+json">
+{{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
     {{
-        "@context": "https://schema.org",
-        "@graph": [
-            {{
-                "@type": "LocalBusiness",
-                "@id": "https://plomeromazatlanpro.mx/#business",
-                "name": "Plomero Mazatlán Pro",
-                "url": "https://plomeromazatlanpro.mx/servicios/plomero-colonias-mazatlan/{slug}/",
-                "telephone": "+52 669 132 5300",
-                "address": {{
-                    "@type": "PostalAddress",
-                    "streetAddress": "{nombre_colonia}",
-                    "addressLocality": "Mazatlán",
-                    "postalCode": "{codigo_postal}",
-                    "addressRegion": "Sinaloa",
-                    "addressCountry": "MX"
-                }},
-                "geo": {{
-                    "@type": "GeoCoordinates",
-                    "latitude": 23.2494,
-                    "longitude": -106.4111
-                }},
-                "openingHoursSpecification": {{
-                    "@type": "OpeningHoursSpecification",
-                    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-                    "opens": "00:00",
-                    "closes": "23:59"
-                }},
-                "priceRange": "$$",
-                "image": "https://plomeromazatlanpro.mx/logo-plomero-mazatlan-pro.webp"
-            }},
-            {{
-                "@type": "Service",
-                "serviceType": "Plomería en {nombre_colonia}",
-                "provider": {{"@id": "https://plomeromazatlanpro.mx/#business"}},
-                "areaServed": {{
-                    "@type": "Place",
-                    "name": "{nombre_colonia}, Mazatlán, Sinaloa"
-                }}
-            }},
-            {{
-                "@type": "BreadcrumbList",
-                "itemListElement": [
-                    {{"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://plomeromazatlanpro.mx/"}},
-                    {{"@type": "ListItem", "position": 2, "name": "Colonias", "item": "https://plomeromazatlanpro.mx/servicios/plomero-colonias-mazatlan/"}},
-                    {{"@type": "ListItem", "position": 3, "name": "{nombre_colonia}", "item": "https://plomeromazatlanpro.mx/servicios/plomero-colonias-mazatlan/{slug}/"}}
-                ]
-            }}
-        ]
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://plomeromazatlanpro.mx/"
+    }},
+    {{
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Servicios",
+      "item": "https://plomeromazatlanpro.mx/#servicios"
+    }},
+    {{
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Plomero por Colonias",
+      "item": "https://plomeromazatlanpro.mx/servicios/plomero-colonias-mazatlan/"
+    }},
+    {{
+      "@type": "ListItem",
+      "position": 4,
+      "name": "{nombre}",
+      "item": "https://plomeromazatlanpro.mx/servicios/plomero-colonias-mazatlan/{slug}/"
     }}
-    </script>
+  ]
+}}
+</script>
+
+    <style>
+    .breadcrumb {{
+        background: #f8f9fa;
+        padding: 12px 0;
+        font-size: 14px;
+        border-bottom: 1px solid #e9ecef;
+    }}
+    .breadcrumb-container {{
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }}
+    .breadcrumb-list {{
+        display: flex;
+        align-items: center;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        flex-wrap: wrap;
+    }}
+    .breadcrumb-item {{
+        display: flex;
+        align-items: center;
+    }}
+    .breadcrumb-item a {{
+        color: #0066cc;
+        text-decoration: none;
+        transition: color 0.2s;
+    }}
+    .breadcrumb-item a:hover {{
+        color: #004499;
+        text-decoration: underline;
+    }}
+    .breadcrumb-item.active {{
+        color: #6c757d;
+    }}
+    .breadcrumb-separator {{
+        margin: 0 8px;
+        color: #6c757d;
+        user-select: none;
+    }}
+    @media (max-width: 768px) {{
+        .breadcrumb {{
+            font-size: 13px;
+            padding: 10px 0;
+        }}
+        .breadcrumb-separator {{
+            margin: 0 6px;
+        }}
+    }}
+    </style>
+
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <nav class="nav">
-                <a href="/" class="logo">
-                    <img src="../../../assets/images/logo-512.webp" alt="Plomero Mazatlán Pro" width="180" height="60" loading="eager">
-                </a>
-                <div class="nav-links">
-                    <a href="/#servicios">Servicios</a>
-                    <a href="/#precios">Precios</a>
-                    <a href="/blog/">Blog</a>
-                    <a href="https://wa.me/526691325300" class="btn btn-small">WhatsApp</a>
-                </div>
-            </nav>
+<nav class="nav"><div class="container"><div class="nav-wrapper"><a href="../../../" class="logo">
+                    <img src="../../../logo-plomero-mazatlan-pro.webp" alt="Plomero Mazatlán Pro - Logo">
+                </a><button class="mobile-menu-btn" aria-label="Menu"><span></span><span></span><span></span></button><ul class="nav-menu"><li><a href="../../../#inicio" class="nav-link">Inicio</a></li><li><a href="../../../#servicios" class="nav-link">Servicios</a></li><li><a href="../../../blog/" class="nav-link">Blog</a></li><li><a href="../../../#contacto" class="nav-link">Contacto</a></li></ul></div></div></nav>
+
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="breadcrumb">
+        <div class="breadcrumb-container">
+            <ol class="breadcrumb-list">
+            <li class="breadcrumb-item"><a href="https://plomeromazatlanpro.mx/">Inicio</a></li>
+            <li class="breadcrumb-separator" aria-hidden="true">›</li>
+            <li class="breadcrumb-item"><a href="https://plomeromazatlanpro.mx/#servicios">Servicios</a></li>
+            <li class="breadcrumb-separator" aria-hidden="true">›</li>
+            <li class="breadcrumb-item"><a href="https://plomeromazatlanpro.mx/servicios/plomero-colonias-mazatlan/">Plomero por Colonias</a></li>
+            <li class="breadcrumb-separator" aria-hidden="true">›</li>
+            <li class="breadcrumb-item active" aria-current="page">{nombre}</li>
+            </ol>
         </div>
-    </header>
-
-    <main>
-        <!-- Breadcrumbs -->
-        <nav class="breadcrumbs" aria-label="Breadcrumb">
-            <div class="container">
-                <ol>
-                    <li><a href="/">Inicio</a></li>
-                    <li><a href="/servicios/plomero-colonias-mazatlan/">Colonias</a></li>
-                    <li aria-current="page">{nombre_colonia}</li>
-                </ol>
-            </div>
-        </nav>
-
-        <!-- Hero Section -->
-        <section class="hero hero-small">
-            <div class="container">
-                <h1>Plomero en {nombre_colonia}, Mazatlán</h1>
-                <p class="hero-subtitle">Servicio de plomería profesional en tu colonia. Llegamos en 30-60 minutos.</p>
-                <div class="hero-cta">
-                    <a href="https://wa.me/526691325300?text=Hola%2C%20necesito%20un%20plomero%20en%20{slug.replace('-', '%20')}" class="btn btn-primary btn-large">
-                        WhatsApp: 669 132 5300
-                    </a>
-                    <a href="tel:+526691325300" class="btn btn-secondary btn-large">Llamar Ahora</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Servicios en la colonia -->
-        <section class="section">
-            <div class="container">
-                <h2>Servicios de Plomería en {nombre_colonia}</h2>
-                <div class="services-grid">
-                    <div class="service-card">
-                        <h3>Fugas de Agua</h3>
-                        <p>Detectamos y reparamos fugas en {nombre_colonia}. Servicio de emergencia 24/7.</p>
-                        <p class="price">Desde <strong>$600</strong></p>
-                    </div>
-                    <div class="service-card">
-                        <h3>Destape de Drenajes</h3>
-                        <p>Destapamos drenajes, WC y tuberías en {nombre_colonia}. Equipo profesional.</p>
-                        <p class="price">Desde <strong>$400</strong></p>
-                    </div>
-                    <div class="service-card">
-                        <h3>Reparación de Boiler</h3>
-                        <p>Reparamos y damos mantenimiento a boilers en {nombre_colonia}.</p>
-                        <p class="price">Desde <strong>$900</strong></p>
-                    </div>
-                    <div class="service-card">
-                        <h3>Instalación de Tinaco</h3>
-                        <p>Instalamos tinacos y cisternas en {nombre_colonia}. Todas las marcas.</p>
-                        <p class="price">Desde <strong>$1,500</strong></p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Por qué elegirnos -->
-        <section class="section section-alt">
-            <div class="container">
-                <h2>¿Por qué elegir Plomero Mazatlán Pro en {nombre_colonia}?</h2>
-                <ul class="benefits-list">
-                    <li><strong>Conocemos {nombre_colonia}:</strong> Sabemos las particularidades de las instalaciones en tu zona.</li>
-                    <li><strong>Llegamos rápido:</strong> Tiempo de respuesta de 30-60 minutos en {nombre_colonia}.</li>
-                    <li><strong>Precios justos:</strong> Cotización gratis antes de iniciar. Sin sorpresas.</li>
-                    <li><strong>Garantía:</strong> 6 meses de garantía en todas las reparaciones.</li>
-                    <li><strong>Disponibles 24/7:</strong> Emergencias nocturnas, fines de semana y días festivos.</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- CTA Final -->
-        <section class="section cta-section">
-            <div class="container text-center">
-                <h2>¿Necesitas un plomero en {nombre_colonia}?</h2>
-                <p>Contáctanos ahora y resolvemos tu problema hoy mismo.</p>
-                <a href="https://wa.me/526691325300?text=Hola%2C%20necesito%20un%20plomero%20en%20{slug.replace('-', '%20')}" class="btn btn-primary btn-large">
-                    Contactar por WhatsApp
-                </a>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-logo">
-                <img src="../../../assets/images/logo-512.webp" alt="Plomero Mazatlán Pro" width="150" height="50">
-            </div>
-            <p>&copy; 2024 Plomero Mazatlán Pro. Todos los derechos reservados.</p>
-            <p><a href="/servicios/plomero-colonias-mazatlan/">Ver todas las colonias</a></p>
-        </div>
-    </footer>
-
-    <!-- WhatsApp Float Button -->
-    <a href="https://wa.me/526691325300" class="whatsapp-float" aria-label="Contactar por WhatsApp">
-        <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-        </svg>
-    </a>
+    </nav>
+<header id="inicio" class="hero"><div class="container"><div class="hero-content"><h1 class="fade-in">{datos["titulo"]}</h1><p class="hero-subtitle fade-in">{datos["subtitulo"]}</p>
+    <div style="background: #e8f4f8; padding: 20px; border-radius: 8px; margin: 24px 0; border-left: 4px solid #0066cc;">
+        <p style="margin: 0; font-size: 15px; line-height: 1.6;">
+            <strong>Nuestros servicios principales:</strong>
+            <a href="../../emergencia-24-7/" style="color: #0066cc;">Emergencias 24/7</a>,
+            <a href="../../destape-de-drenajes/" style="color: #0066cc;">destape de drenajes</a>,
+            <a href="../../reparacion-de-fugas/" style="color: #0066cc;">reparación de fugas</a> y
+            <a href="../../deteccion-de-fugas/" style="color: #0066cc;">detección de fugas</a>.
+        </p>
+    </div>
+<p class="hero-contact">WhatsApp: 52 669 132 5300</p><a href="#contacto" class="btn-primary hover-lift">Solicitar Servicio en {nombre}</a></div></div></header>
+<section class="section section-alt"><div class="container"><h2>Experiencia en {datos["experiencia"]}</h2><div class="benefits-grid">{beneficios_html}</div></div></section>
+<section id="servicios" class="section"><div class="container"><h2>Servicios Especializados en {nombre}</h2><div class="grid">{servicios_html}</div></div></section>
+<section class="section section-alt"><div class="container"><h2>Conocimiento de {nombre}</h2><div class="pricing-content"><div class="pricing-box"><h3>¿Por qué nos eligen en {nombre}?</h3>{conocimiento_html}</div></div></div></section>
+<section class="section"><div class="container"><h2>Testimonios de {nombre}</h2><div class="testimonials">{testimonios_html}</div></div></section>
+<section id="contacto" class="section section-alt"><div class="container"><h2>¿Necesitas Plomero en {nombre}?</h2><div class="final-cta"><p class="cta-text">WhatsApp: <strong>669 132 5300</strong></p><div class="cta-buttons"><a href="https://wa.me/526691325300?text=Hola,%20necesito%20un%20plomero%20en%20{slug.replace('-', '%20')}" target="_blank" class="btn-primary">WhatsApp</a><a href="tel:6691325300" class="btn-secondary">Llamar</a></div></div></div></section>
+<footer class="footer"><div class="container"><p>&copy; 2025 Plomero Mazatlán Pro. Expertos en {nombre}. | <a href="/terminos/">Términos</a></p></div></footer>
+<script>const m=document.querySelector('.mobile-menu-btn'),n=document.querySelector('.nav-menu');m.addEventListener('click',()=>{{n.classList.toggle('active');m.classList.toggle('active')}});document.querySelectorAll('.nav-link').forEach(l=>l.addEventListener('click',()=>{{n.classList.remove('active');m.classList.remove('active')}}));</script>
+<style>.cta-bar{{position:fixed;right:16px;bottom:16px;display:flex;gap:10px;z-index:9999}}.cta-btn{{font:600 15px/1.1 system-ui;padding:12px 14px;border-radius:12px;color:#fff;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.15)}}.cta-wa{{background:#25D366}}.cta-tel{{background:#1E40AF}}</style>
+<div class="cta-bar"><a id="cta-whatsapp" class="cta-btn cta-wa" href="https://wa.me/526691325300?text=Hola,%20necesito%20un%20plomero%20en%20{slug.replace('-', '%20')}" rel="noopener">💬 WhatsApp</a><a id="cta-llamar" class="cta-btn cta-tel" href="tel:+526691325300" rel="noopener">📞 Llamar</a></div>
 </body>
 </html>'''
     return template
@@ -275,36 +350,54 @@ def generar_pagina_colonia(nombre_colonia, codigo_postal="82000"):
 def main():
     base_path = Path("/Users/hectorpc/Documents/Hector Palazuelos/Google My Business/Plomero Mazatlan Pro/servicios/plomero-colonias-mazatlan")
 
-    # Cargar JSON de colonias para obtener códigos postales
-    json_path = Path("/Users/hectorpc/Documents/Hector Palazuelos/Google My Business/Plomero Mazatlan Pro/mazatlan_colonias.json")
-    with open(json_path, 'r', encoding='utf-8') as f:
-        data = json.load(f)
-
-    # Crear diccionario de colonias con CP
-    colonias_cp = {}
-    for c in data['colonias']:
-        nombre_lower = c['nombre'].lower()
-        colonias_cp[nombre_lower] = c.get('codigoPostal', '82000')
-
     created = 0
-    for colonia in COLONIAS_PRINCIPALES:
-        slug = slugify(colonia)
+
+    # Primero eliminar las carpetas existentes
+    import shutil
+    for item in base_path.iterdir():
+        if item.is_dir():
+            shutil.rmtree(item)
+            print(f"🗑️ Eliminada: {item.name}/")
+
+    # Crear colonias con datos específicos
+    for nombre, datos in COLONIAS_PRINCIPALES.items():
+        slug = slugify(nombre)
         colonia_path = base_path / slug
-
-        # Obtener código postal
-        cp = colonias_cp.get(colonia.lower(), '82000')
-
-        # Crear directorio
         colonia_path.mkdir(parents=True, exist_ok=True)
 
-        # Generar HTML
-        html = generar_pagina_colonia(colonia, cp)
-
-        # Escribir archivo
+        html = generar_pagina(nombre, datos)
         with open(colonia_path / 'index.html', 'w', encoding='utf-8') as f:
             f.write(html)
 
-        print(f"✓ Creada: {colonia} -> {slug}/")
+        print(f"✓ Creada (específica): {nombre} -> {slug}/")
+        created += 1
+
+    # Crear colonias con datos genéricos - Lote 1
+    for nombre in COLONIAS_GENERICAS:
+        slug = slugify(nombre)
+        colonia_path = base_path / slug
+        colonia_path.mkdir(parents=True, exist_ok=True)
+
+        datos = generar_datos_genericos(nombre)
+        html = generar_pagina(nombre, datos)
+        with open(colonia_path / 'index.html', 'w', encoding='utf-8') as f:
+            f.write(html)
+
+        print(f"✓ Creada (genérica): {nombre} -> {slug}/")
+        created += 1
+
+    # Crear colonias con datos genéricos - Lote 2
+    for nombre in COLONIAS_GENERICAS_2:
+        slug = slugify(nombre)
+        colonia_path = base_path / slug
+        colonia_path.mkdir(parents=True, exist_ok=True)
+
+        datos = generar_datos_genericos(nombre)
+        html = generar_pagina(nombre, datos)
+        with open(colonia_path / 'index.html', 'w', encoding='utf-8') as f:
+            f.write(html)
+
+        print(f"✓ Creada (lote 2): {nombre} -> {slug}/")
         created += 1
 
     print(f"\n✅ Total: {created} páginas de colonias creadas")
