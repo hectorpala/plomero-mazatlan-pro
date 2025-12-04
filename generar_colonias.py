@@ -105,30 +105,22 @@ COLONIAS_PRINCIPALES = {
     },
 }
 
-# Colonias con datos genéricos - Lote 1 (40 colonias)
-COLONIAS_GENERICAS = [
-    "Cerritos", "El Cid", "Sábalo Country", "Gaviotas", "Playas del Sol",
-    "Infonavit Playas", "Lomas de Mazatlán", "Lomas del Mar", "Palos Prietos",
-    "Benito Juárez", "Juárez", "Francisco Villa", "Flores Magón", "López Mateos",
-    "Rafael Buelna", "Villa Galaxia", "Real del Valle", "Real Pacífico",
-    "Pradera Dorada", "Villas del Sol", "Villas del Estero", "Hacienda las Cruces",
-    "Marina Garden", "Santa Fe", "La Marina", "Flamingos", "Costa Brava",
-    "Villa Verde", "Palmillas", "Jacarandas", "Los Mangos", "Insurgentes",
-    "Tellería", "Urías", "Valle del Ejido", "Las Torres", "Club de Golf",
-]
+def cargar_colonias_del_json():
+    """Carga las colonias desde el archivo JSON oficial de Mazatlán"""
+    json_path = Path("/Users/hectorpc/Documents/Hector Palazuelos/Google My Business/Plomero Mazatlan Pro/mazatlan_colonias.json")
+    with open(json_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
 
-# Colonias con datos genéricos - Lote 2 (40 colonias más del JSON)
-COLONIAS_GENERICAS_2 = [
-    "Alameda", "Alborada", "Altabrisa", "Anáhuac", "Ángela Peralta",
-    "Antiguo Aeropuerto", "Antonio Toledo Corro", "Arboledas", "Azteca",
-    "Bahía", "Bicentenario", "Buenos Aires", "Café Combate", "Camarón",
-    "Campo Bello", "Campo Pesquero", "Canaco", "Casa Redonda", "Cerro del Vigía",
-    "Chapultepec", "Constitución", "Country Club", "Del Bosque", "Del Mar",
-    "Dorado", "El Castillo", "El Habal", "El Toreo", "El Venadillo",
-    "Felipe Ángeles", "Ferrocarrilera", "Genaro Estrada", "Habal Cerritos",
-    "Infonavit Alarcón", "Infonavit CTM", "Jesús García", "La Esperanza",
-    "La Sirena", "Las Gaviotas", "Libertad",
-]
+    # Extraer nombres únicos de colonias
+    colonias = set()
+    for c in data['colonias']:
+        nombre = c['nombre']
+        # Normalizar: convertir mayúsculas a título
+        if nombre.isupper():
+            nombre = nombre.title()
+        colonias.add(nombre)
+
+    return sorted(list(colonias))
 
 def slugify(text):
     """Convertir texto a slug para URL"""
@@ -372,9 +364,21 @@ def main():
         print(f"✓ Creada (específica): {nombre} -> {slug}/")
         created += 1
 
-    # Crear colonias con datos genéricos - Lote 1
-    for nombre in COLONIAS_GENERICAS:
+    # Cargar colonias del JSON oficial
+    todas_colonias = cargar_colonias_del_json()
+    print(f"\n📋 Total colonias en JSON: {len(todas_colonias)}")
+
+    # Nombres de colonias principales (ya creadas arriba)
+    principales = set(slugify(n) for n in COLONIAS_PRINCIPALES.keys())
+
+    # Crear páginas para TODAS las colonias del JSON (excepto las principales)
+    for nombre in todas_colonias:
         slug = slugify(nombre)
+
+        # Saltar si ya se creó como colonia principal
+        if slug in principales:
+            continue
+
         colonia_path = base_path / slug
         colonia_path.mkdir(parents=True, exist_ok=True)
 
@@ -383,21 +387,7 @@ def main():
         with open(colonia_path / 'index.html', 'w', encoding='utf-8') as f:
             f.write(html)
 
-        print(f"✓ Creada (genérica): {nombre} -> {slug}/")
-        created += 1
-
-    # Crear colonias con datos genéricos - Lote 2
-    for nombre in COLONIAS_GENERICAS_2:
-        slug = slugify(nombre)
-        colonia_path = base_path / slug
-        colonia_path.mkdir(parents=True, exist_ok=True)
-
-        datos = generar_datos_genericos(nombre)
-        html = generar_pagina(nombre, datos)
-        with open(colonia_path / 'index.html', 'w', encoding='utf-8') as f:
-            f.write(html)
-
-        print(f"✓ Creada (lote 2): {nombre} -> {slug}/")
+        print(f"✓ {nombre} -> {slug}/")
         created += 1
 
     print(f"\n✅ Total: {created} páginas de colonias creadas")
