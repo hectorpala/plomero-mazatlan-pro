@@ -138,7 +138,7 @@ Debes responder EXACTAMENTE en este formato JSON:
 
 **Negocio**: Plomero Mazatlán Pro
 **Ubicación**: Mazatlán, Sinaloa, México
-**Zonas de servicio**: Las Quintas, Tres Ríos, Chapultepec, Montebello, Centro
+**Zonas de servicio**: Zona Dorada, Marina Mazatlán, Centro, Cerritos, El Cid, Gaviotas
 **Teléfono**: 669 132 5300
 **Rating**: 4.9★ en Google
 **Clientes**: 200+ clientes satisfechos
