@@ -22,7 +22,7 @@ jobs:
       - name: Define URLs
         id: urls
         run: |
-          echo 'URLS=/ /servicios/plomero/cerca-de-mi/ /servicios/plomero/24-7/ /servicios/plomero/a-domicilio/ /servicios/plomero/precios/ /contacto/' >> $GITHUB_OUTPUT
+          echo 'URLS=/ /servicios/plomero-cerca-de-mi/ /servicios/plomero-24-horas/ /servicios/plomero-a-domicilio/ /servicios/plomero-precios/ /contacto/' >> $GITHUB_OUTPUT
 
       - name: Check sitemap HTTP 200
         run: |
