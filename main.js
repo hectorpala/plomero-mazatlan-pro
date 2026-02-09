@@ -2,6 +2,26 @@
 // Loaded with defer for optimal performance
 // Last updated: 2025-11-21
 
+// Nav scroll state - add white background when scrolled past hero
+(function() {
+    var nav = document.querySelector('.nav');
+    if (!nav) return;
+    var ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            requestAnimationFrame(function() {
+                if (window.scrollY > 80) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+})();
+
 // Mobile menu toggle
 (function() {
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
