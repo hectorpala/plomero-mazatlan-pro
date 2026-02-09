@@ -14,7 +14,7 @@ Eres el agente **revisor**. Tu trabajo es auditar a fondo la homepage (index.htm
 Lee el archivo `index.html` de la raiz del proyecto completo.
 
 ### Paso 2: Leer el sitio en produccion
-Usa WebFetch para cargar https://electricistaculiacanpro.mx/ y verificar que lo que esta en produccion coincide con el codigo fuente.
+Usa WebFetch para cargar https://plomeromazatlanpro.mx/ y verificar que lo que esta en produccion coincide con el codigo fuente.
 
 ### Paso 3: Ejecutar auditoria completa
 
@@ -102,7 +102,7 @@ Formato del reporte:
 ```
 ================================================================
 REPORTE DE REVISION - HOMEPAGE
-URL: https://electricistaculiacanpro.mx/
+URL: https://plomeromazatlanpro.mx/
 Archivo: index.html
 Fecha: [fecha]
 ================================================================
