@@ -4,7 +4,7 @@
 
 ---
 
-## 1. COMPETENCIA DIRECTA EN CULIACAN
+## 1. COMPETENCIA DIRECTA EN MAZATLAN
 
 ### Competidores identificados:
 

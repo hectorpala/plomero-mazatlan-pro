@@ -1,7 +1,7 @@
 // audit-media-simple.mjs - Simplified version without puppeteer
 import https from 'https';
 
-const BASE = "https://plomeroculiacanpro.mx";
+const BASE = "https://plomeromazatlanpro.mx";
 const PAGES = [
   "/", "/servicios/plomero/cerca-de-mi/", "/servicios/plomero/24-7/",
   "/servicios/plomero/a-domicilio/", "/servicios/plomero/precios/", "/contacto/"

@@ -1,7 +1,7 @@
 // audit-frames.mjs — Mide contenedores de imagen ("recuadros") por página y viewport
 import puppeteer from "puppeteer";
 
-const BASE = "https://plomeroculiacanpro.mx";
+const BASE = "https://plomeromazatlanpro.mx";
 const PAGES = [
   "/", "/servicios/plomero/cerca-de-mi/", "/servicios/plomero/24-7/",
   "/servicios/plomero/a-domicilio/", "/servicios/plomero/precios/", "/contacto/"

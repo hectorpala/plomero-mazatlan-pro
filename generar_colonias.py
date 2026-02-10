@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Generador de páginas de colonias para Plomero Mazatlán Pro
-Estructura idéntica a Plomero Culiacán Pro
+Generador de páginas de colonias para Plomero Mazatlán Pro
 """
 import json
 import os
@@ -171,7 +171,7 @@ def generar_datos_genericos(nombre):
     }
 
 def generar_pagina(nombre, datos):
-    """Genera el HTML para una página de colonia - estructura idéntica a Culiacán"""
+    """Genera el HTML para una página de colonia - estructura para Mazatlán"""
     slug = slugify(nombre)
 
     # Generar beneficios HTML

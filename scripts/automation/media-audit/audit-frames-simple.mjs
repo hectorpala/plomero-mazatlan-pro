@@ -2,7 +2,7 @@
 import https from 'https';
 import { readFileSync } from 'fs';
 
-const BASE = "https://plomeroculiacanpro.mx";
+const BASE = "https://plomeromazatlanpro.mx";
 const PAGES = [
   "/", "/servicios/plomero/cerca-de-mi/", "/servicios/plomero/24-7/",
   "/servicios/plomero/a-domicilio/", "/servicios/plomero/precios/", "/contacto/"
