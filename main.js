@@ -2,46 +2,87 @@
 // Loaded with defer for optimal performance
 // Last updated: 2025-11-21
 
-// Nav scroll state - add white background when scrolled past hero
+// Nav scroll – fondo solido al hacer scroll
 (function() {
     var nav = document.querySelector('.nav');
     if (!nav) return;
+
     var ticking = false;
+
+    function updateNav() {
+        if (window.scrollY > 50) {
+            nav.classList.add('nav-scrolled');
+        } else {
+            nav.classList.remove('nav-scrolled');
+        }
+        ticking = false;
+    }
+
     window.addEventListener('scroll', function() {
         if (!ticking) {
-            requestAnimationFrame(function() {
-                if (window.scrollY > 80) {
-                    nav.classList.add('scrolled');
-                } else {
-                    nav.classList.remove('scrolled');
-                }
-                ticking = false;
-            });
+            requestAnimationFrame(updateNav);
             ticking = true;
         }
-    });
+    }, { passive: true });
+
+    updateNav();
 })();
 
-// Mobile menu toggle
+// Mobile menu toggle with scroll position preservation
 (function() {
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const navMenu = document.querySelector('.nav-menu');
+    if (!mobileMenuBtn || !navMenu) return;
+
+    let scrollY = 0;
+
+    function openMenu() {
+        scrollY = window.scrollY;
+        document.body.style.top = '-' + scrollY + 'px';
+        document.body.classList.add('menu-open');
+        navMenu.classList.add('active');
+        mobileMenuBtn.classList.add('active');
+        mobileMenuBtn.setAttribute('aria-expanded', 'true');
+        mobileMenuBtn.setAttribute('aria-label', 'Cerrar menú de navegación');
+    }
+
+    function closeMenu() {
+        const savedScrollY = scrollY;
+        document.body.classList.remove('menu-open');
+        document.body.style.top = '';
+        navMenu.classList.remove('active');
+        mobileMenuBtn.classList.remove('active');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        mobileMenuBtn.setAttribute('aria-label', 'Abrir menú de navegación');
+        window.scrollTo(0, savedScrollY);
+    }
 
     mobileMenuBtn.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-        mobileMenuBtn.classList.toggle('active');
-        // Prevent CLS: lock body scroll when menu is open
-        document.body.classList.toggle('menu-open');
+        if (document.body.classList.contains('menu-open')) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
     });
 
     // Close mobile menu when clicking a link
     document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', () => {
-            navMenu.classList.remove('active');
-            mobileMenuBtn.classList.remove('active');
-            document.body.classList.remove('menu-open');
-        });
+        link.addEventListener('click', closeMenu);
     });
+})();
+
+// Urgency indicator - mensaje dinamico segun hora del dia
+(function() {
+    var el = document.getElementById('urgency-text');
+    if (!el) return;
+
+    var h = new Date().getHours();
+
+    if (h >= 7 && h < 22) {
+        el.textContent = 'Disponible ahora \u2013 respuesta en ~5 min';
+    } else {
+        el.textContent = 'Servicio nocturno activo';
+    }
 })();
 
 // Real-time form validation
@@ -256,8 +297,8 @@
   });
 })();
 
-// Tracking de tarjetas SEO
-(function() {
+// Tracking de tarjetas SEO - diferido con requestIdleCallback
+(typeof requestIdleCallback === 'function' ? requestIdleCallback : setTimeout)(function() {
   // Tracking de clics en tarjetas "Más opciones de plomería"
   document.querySelectorAll('.seo-card[data-event="click_seo_card"]').forEach(function(card) {
     card.addEventListener('click', function(e) {
@@ -280,130 +321,65 @@
     });
   });
 
-  // Tracking de scroll depth para medir engagement
+  // Tracking de scroll depth para medir engagement - optimizado con rAF throttle
   var scrollDepths = [25, 50, 75, 90];
   var scrollTracked = {};
+  var scrollTicking = false;
+  var cachedScrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+
+  // Actualizar cache solo en resize
+  window.addEventListener('resize', function() {
+    cachedScrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+  }, { passive: true });
 
   window.addEventListener('scroll', function() {
-    var scrollPercent = Math.round((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
-
-    scrollDepths.forEach(function(depth) {
-      if (scrollPercent >= depth && !scrollTracked[depth]) {
-        scrollTracked[depth] = true;
-        try {
-          window.dataLayer = window.dataLayer || [];
-          window.dataLayer.push({
-            'event': 'scroll_depth',
-            'scroll_percentage': depth,
-            'page_location': window.location.pathname
-          });
-        } catch(e) {}
+    if (scrollTicking) return;
+    scrollTicking = true;
+    requestAnimationFrame(function() {
+      var scrollPercent = Math.round((window.scrollY / cachedScrollableHeight) * 100);
+      for (var i = 0; i < scrollDepths.length; i++) {
+        var depth = scrollDepths[i];
+        if (scrollPercent >= depth && !scrollTracked[depth]) {
+          scrollTracked[depth] = true;
+          try {
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+              'event': 'scroll_depth',
+              'scroll_percentage': depth,
+              'page_location': window.location.pathname
+            });
+          } catch(e) {}
+        }
       }
+      scrollTicking = false;
     });
-  });
-})();
+  }, { passive: true });
+});
 
-// Exit-Intent Popup
-(function() {
+// Exit-Intent Popup - versión simplificada (móvil: back button, desktop: mouseleave)
+(typeof requestIdleCallback === 'function' ? requestIdleCallback : setTimeout)(function() {
     var popup = document.getElementById('exit-intent-popup');
-    if (!popup) return; // Exit if popup doesn't exist
+    if (!popup) return;
 
     var closeBtn = document.querySelector('.exit-popup-close');
     var whatsappBtn = document.getElementById('exit-popup-whatsapp');
     var phoneBtn = document.getElementById('exit-popup-phone');
-    var hasShown = localStorage.getItem('exitPopupShown');
-    var isExiting = false;
-    var mouseY = 0;
-    var timeOnPage = 0;
-    var minTimeBeforePopup = 2000; // 2 seconds minimum on page (desktop)
-    var minTimeBeforePopupMobile = 7000; // 7 seconds minimum on page (mobile)
+    var popupShown = false;
+    var SESSION_KEY = 'exitPopupShown';
 
-    // Mobile detection and scroll tracking
-    var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    var lastScrollY = 0;
-    var scrollingUp = false;
+    // Ya se mostró en esta sesión? Salir
+    if (sessionStorage.getItem(SESSION_KEY)) return;
 
-    // Check if popup should be shown (only once per session)
-    if (hasShown) {
-        // console.log('[Exit-Intent] Ya se mostró anteriormente. Para re-probar: localStorage.removeItem("exitPopupShown")');
-        return;
-    }
-
-    if (isMobile) {
-        // console.log('[Exit-Intent] Modo MÓVIL activado. Espera 10+ segundos y haz scroll hacia arriba para activar.');
-    } else {
-        // console.log('[Exit-Intent] Modo DESKTOP activado. Espera 2+ segundos y mueve mouse hacia arriba para activar.');
-    }
-
-    // Track time on page
-    var pageLoadTime = Date.now();
-
-    // DESKTOP: Track mouse position continuously
-    if (!isMobile) {
-        document.addEventListener('mousemove', function(e) {
-            mouseY = e.clientY;
-        });
-
-        // Detect exit intent - ONLY when mouse leaves through TOP of viewport
-        document.addEventListener('mouseout', function(e) {
-            // Ignore if already shown
-            if (isExiting) return;
-
-            // Get the element the mouse is leaving TO
-            var toElement = e.relatedTarget || e.toElement;
-
-            // Check if mouse is leaving the document (null = left viewport)
-            // AND mouse Y position is near top (< 10px)
-            // AND minimum time on page has passed
-            timeOnPage = Date.now() - pageLoadTime;
-
-            // Debug logging
-            if (!toElement && mouseY < 10) {
-                // console.log('[Exit-Intent] Detectado intento de salida. Tiempo en página:', Math.round(timeOnPage / 1000) + 's');
-            }
-
-            if (!toElement &&
-                mouseY < 10 &&
-                timeOnPage >= minTimeBeforePopup &&
-                !isExiting) {
-                isExiting = true;
-                // console.log('[Exit-Intent] ✅ Mostrando popup (Desktop)!');
-                showPopup();
-            } else if (!toElement && mouseY < 10 && timeOnPage < minTimeBeforePopup) {
-                // console.log('[Exit-Intent] ⏱️  Muy pronto. Necesitas ' + Math.ceil((minTimeBeforePopup - timeOnPage) / 1000) + 's más.');
-            }
-        });
-    }
-
-    // MOBILE: Detect scroll up (exit intent alternative)
-    if (isMobile) {
-        window.addEventListener('scroll', function() {
-            if (isExiting) return;
-
-            var currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
-            scrollingUp = currentScrollY < lastScrollY;
-
-            timeOnPage = Date.now() - pageLoadTime;
-
-            // Trigger if: scrolling up + at top 20% of page + 10+ seconds on page
-            if (scrollingUp &&
-                currentScrollY < (document.documentElement.scrollHeight * 0.2) &&
-                timeOnPage >= minTimeBeforePopupMobile &&
-                !isExiting) {
-                isExiting = true;
-                // console.log('[Exit-Intent] ✅ Mostrando popup (Mobile - scroll up)!');
-                showPopup();
-            } else if (scrollingUp && currentScrollY < (document.documentElement.scrollHeight * 0.2) && timeOnPage < minTimeBeforePopupMobile) {
-                // console.log('[Exit-Intent Mobile] ⏱️  Necesitas ' + Math.ceil((minTimeBeforePopupMobile - timeOnPage) / 1000) + 's más.');
-            }
-
-            lastScrollY = currentScrollY;
-        });
+    function isMobile() {
+        return window.innerWidth <= 768 || 'ontouchstart' in window;
     }
 
     function showPopup() {
+        if (popupShown) return;
+        popupShown = true;
+        sessionStorage.setItem(SESSION_KEY, 'true');
         popup.style.display = 'flex';
-        localStorage.setItem('exitPopupShown', 'true');
+        document.body.style.overflow = 'hidden';
 
         // Track popup shown event
         try {
@@ -411,13 +387,14 @@
             window.dataLayer.push({
                 'event': 'exit_intent_shown',
                 'page_location': window.location.pathname,
-                'time_on_page': Math.round(timeOnPage / 1000) + 's'
+                'trigger': isMobile() ? 'mobile_back' : 'desktop_mouseleave'
             });
         } catch(e) {}
     }
 
     function hidePopup() {
         popup.style.display = 'none';
+        document.body.style.overflow = '';
 
         // Track popup close event
         try {
@@ -427,6 +404,24 @@
                 'page_location': window.location.pathname
             });
         } catch(e) {}
+    }
+
+    // DESKTOP: Mouse leave detection
+    if (!isMobile()) {
+        document.addEventListener('mouseleave', function(e) {
+            if (e.clientY < 10) showPopup();
+        });
+    }
+
+    // MOBILE: Detectar botón back
+    if (isMobile()) {
+        history.pushState(null, '', location.href);
+        window.addEventListener('popstate', function() {
+            if (!popupShown) {
+                showPopup();
+                history.pushState(null, '', location.href);
+            }
+        });
     }
 
     // Close popup on X button click
@@ -446,7 +441,7 @@
 
     // Close popup on ESC key
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && popup.style.display === 'flex') {
+        if (popup.style.display === 'flex' && e.key === 'Escape') {
             hidePopup();
         }
     });
@@ -476,7 +471,54 @@
             } catch(e) {}
         });
     }
-})();
+}, 2500);
+
+// Hide floating buttons in critical sections - optimizado sin reflows
+(typeof requestIdleCallback === 'function' ? requestIdleCallback : setTimeout)(function() {
+    var floatingBtns = document.querySelectorAll('.floating-btn');
+    if (!floatingBtns.length) return;
+
+    var criticalSections = document.querySelectorAll('#contacto, .footer, .contact-form, .map-embed');
+    if (!criticalSections.length) return;
+
+    // Flags para evitar lecturas de classList en cada callback
+    var isHidden = false;
+    var menuOpen = false;
+
+    // Observar cambios de clase en body una sola vez
+    var bodyObserver = new MutationObserver(function(mutations) {
+        menuOpen = document.body.classList.contains('menu-open');
+    });
+    bodyObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+    function updateVisibility(shouldHide) {
+        if (shouldHide === isHidden) return; // No cambio, evitar reflow
+        isHidden = shouldHide;
+        var opacity = shouldHide ? '0' : '1';
+        var pointer = shouldHide ? 'none' : 'auto';
+        for (var i = 0; i < floatingBtns.length; i++) {
+            floatingBtns[i].style.cssText = 'opacity:' + opacity + ';pointer-events:' + pointer;
+        }
+    }
+
+    var observer = new IntersectionObserver(function(entries) {
+        var anyVisible = false;
+        for (var i = 0; i < entries.length; i++) {
+            if (entries[i].isIntersecting && entries[i].intersectionRatio > 0.3) {
+                anyVisible = true;
+                break;
+            }
+        }
+        if (!menuOpen) updateVisibility(anyVisible);
+    }, {
+        threshold: [0, 0.3, 0.5],
+        rootMargin: '0px 0px -100px 0px'
+    });
+
+    criticalSections.forEach(function(section) {
+        observer.observe(section);
+    });
+});
 
 // Service Worker Registration
 if ('serviceWorker' in navigator) {
