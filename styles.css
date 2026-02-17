@@ -240,7 +240,7 @@ p {
 }
 
 .nav-link {
-  color: #f97316 !important;
+  color: #C2410C !important;
   font-weight: 500;
   text-decoration: none;
   transition: color 0.2s ease;
@@ -2335,7 +2335,7 @@ p {
 
 .stat-label {
   font-size: 0.85rem;
-  color: rgba(255,255,255,0.85);
+  color: #fff;
   font-weight: 500;
 }
 
@@ -2377,6 +2377,10 @@ p {
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; box-shadow: 0 0 6px #22c55e; }
   50% { opacity: 0.5; box-shadow: 0 0 12px #22c55e; }
+}
+
+#urgency-text {
+  color: #C2410C;
 }
 
 /* Hero phone link - hidden by default, shown on mobile */
@@ -2605,7 +2609,7 @@ p {
   .hero-phone-link {
     display: block;
     margin-top: 0.75rem;
-    color: var(--brand);
+    color: var(--brand-dark);
     font-size: 1rem;
     font-weight: 600;
     text-decoration: none;
