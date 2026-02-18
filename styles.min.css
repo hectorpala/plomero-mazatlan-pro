@@ -228,8 +228,8 @@ p {
 
 @media (max-width: 768px) {
   .logo img {
-    height: 62px;
-    max-height: 72px;
+    height: 100px;
+    max-height: 110px;
   }
 }
 
@@ -2473,8 +2473,8 @@ p {
   }
 
   .logo img {
-    height: 62px;
-    max-height: 72px;
+    height: 100px;
+    max-height: 110px;
   }
 
   .logo-text {
