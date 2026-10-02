@@ -58,175 +58,170 @@
 <!-- JSON-LD base (1 línea c/u): Plumber + WebSite + Breadcrumbs -->
 <script type="application/ld+json">
 {
-    "@context": "https://schema.org",
-    "@graph": [
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": "Plomero Mazatlán Pro",
+      "url": "https://plomeromazatlanpro.mx/",
+      "logo": "https://plomeromazatlanpro.mx/logo-plomero-mazatlan-pro.webp"
+    },
+    {
+      "@type": "HomeAndConstructionBusiness",
+      "@id": "https://plomeromazatlanpro.mx/#business",
+      "name": "Plomero Mazatlán Pro",
+      "url": "https://plomeromazatlanpro.mx/servicios/emergencia-24-7/",
+      "telephone": "+52 667 392 2273",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Mazatlán",
+        "addressRegion": "Sinaloa",
+        "addressCountry": "MX"
+      },
+      "openingHoursSpecification": [
         {
-            "@type": "WebSite",
-            "name": "Plomero Mazatlán Pro",
-            "url": "https://plomeromazatlanpro.mx/",
-            "logo": "https://plomeromazatlanpro.mx/logo-plomero-mazatlan-pro.webp"
-        },
-        {
-            "@type": "HomeAndConstructionBusiness",
-            "@id": "https://plomeromazatlanpro.mx/#business",
-            "name": "Plomero Mazatlán Pro",
-            "url": "https://plomeromazatlanpro.mx/servicios/emergencia-24-7/",
-            "telephone": "+52 667 392 2273",
-            "address": {
-                "@type": "PostalAddress",
-                "addressLocality": "Mazatlán",
-                "addressRegion": "Sinaloa",
-                "addressCountry": "MX"
-            },
-            "openingHoursSpecification": [
-                {
-                    "@type": "OpeningHoursSpecification",
-                    "dayOfWeek": [
-                        "Monday",
-                        "Tuesday",
-                        "Wednesday",
-                        "Thursday",
-                        "Friday",
-                        "Saturday",
-                        "Sunday"
-                    ],
-                    "opens": "00:00",
-                    "closes": "23:59"
-                }
-            ],
-            "areaServed": {
-                "@type": "City",
-                "name": "Mazatlán",
-                "addressCountry": "MX"
-            },
-            "sameAs": [
-                "https://www.facebook.com/plomeromazatlanpro",
-                "https://www.instagram.com/plomeromazatlanpro",
-                "https://maps.google.com/?q=Plomero+Mazatlán+Pro"
-            ],
-            "logo": "https://plomeromazatlanpro.mx/logo-plomero-mazatlan-pro.webp",
-            "priceRange": "$$",
-            "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "4.7",
-                "reviewCount": "120"
-            }
-        },
-        {
-            "@type": "Service",
-            "serviceType": "Plomería de Emergencia 24/7",
-            "provider": {
-                "@type": "LocalBusiness",
-                "name": "Plomero Mazatlán Pro",
-                "@id": "https://plomeromazatlanpro.mx",
-                "url": "https://plomeromazatlanpro.mx/servicios/emergencia-24-7/",
-                "telephone": "+526673922273",
-                "priceRange": "$$"
-            },
-            "areaServed": {
-                "@type": "City",
-                "name": "Mazatlán",
-                "containedIn": {
-                    "@type": "State",
-                    "name": "Sinaloa"
-                }
-            },
-            "availableChannel": {
-                "@type": "ServiceChannel",
-                "serviceUrl": "https://plomeromazatlanpro.mx/servicios/emergencia-24-7/",
-                "servicePhone": {
-                    "@type": "ContactPoint",
-                    "telephone": "+526673922273",
-                    "contactType": "Emergency Service",
-                    "areaServed": "Mazatlán",
-                    "availableLanguage": "Spanish",
-                    "hoursAvailable": {
-                        "@type": "OpeningHoursSpecification",
-                        "dayOfWeek": [
-                            "Monday",
-                            "Tuesday",
-                            "Wednesday",
-                            "Thursday",
-                            "Friday",
-                            "Saturday",
-                            "Sunday"
-                        ],
-                        "opens": "00:00",
-                        "closes": "23:59"
-                    }
-                }
-            },
-            "description": "Servicio de plomería de emergencia 24/7 en Mazatlán. Atención inmediata para fugas, destapes, boiler y problemas urgentes. Llegamos en 30-60 minutos."
-        },
-        {
-            "@type": "FAQPage",
-            "mainEntity": [
-                {
-                    "@type": "Question",
-                    "name": "¿Realmente atienden emergencias de plomería las 24 horas?",
-                    "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "Sí, ofrecemos servicio de plomería de emergencia 24/7 en Mazatlán, los 365 días del año. Atendemos madrugadas, fines de semana y días festivos. Nuestro tiempo de respuesta promedio es 30-60 minutos. Contáctanos por WhatsApp al 667 392 2273 o llama al 667 392 2273 para atención inmediata en cualquier momento."
-                    }
-                },
-                {
-                    "@type": "Question",
-                    "name": "¿Cuánto tiempo tardan en llegar en una emergencia?",
-                    "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "Nuestro tiempo promedio de llegada es 30-60 minutos en colonias como Zona Dorada, Marina Mazatlán, Chapultepec y Centro de Mazatlán. En zonas más alejadas puede tomar 60-90 minutos. Confirmamos el tiempo estimado de llegada al momento de contactarnos. Priorizamos emergencias críticas como fugas de gas o inundaciones activas."
-                    }
-                },
-                {
-                    "@type": "Question",
-                    "name": "¿Qué tipo de emergencias de plomería atienden?",
-                    "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "Atendemos todo tipo de emergencias: fugas de agua severas en tuberías o tinaco, fugas de gas con riesgo inmediato, WC desbordándose, drenaje principal tapado, boiler sin agua caliente en invierno, tuberías rotas o congeladas, y cualquier situación que requiera atención inmediata. Llegamos equipados para resolver la emergencia en la primera visita."
-                    }
-                },
-                {
-                    "@type": "Question",
-                    "name": "¿Cuánto cuesta el servicio de emergencia nocturno?",
-                    "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "El servicio de emergencia tiene un cargo base de $500-$800 por visita nocturna (10pm-6am) o días festivos, más el costo de la reparación específica. El diagnóstico está incluido en la visita. Proporcionamos cotización clara antes de iniciar. Los precios son competitivos y justos considerando la urgencia y disponibilidad 24/7."
-                    }
-                },
-                {
-                    "@type": "Question",
-                    "name": "¿Necesito hacer cita para una emergencia?",
-                    "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "No, las emergencias se atienden inmediatamente sin cita previa. Simplemente contáctanos por WhatsApp al 667 392 2273 o llama directamente. Describe brevemente la emergencia y confirmaremos el tiempo de llegada. Un técnico certificado se dirigirá a tu ubicación con herramientas y refacciones comunes para resolver el problema lo más rápido posible."
-                    }
-                }
-            ]
-        },
-        {
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-                {
-                    "@type": "ListItem",
-                    "position": 1,
-                    "name": "Inicio",
-                    "item": "https://plomeromazatlanpro.mx/"
-                },
-                {
-                    "@type": "ListItem",
-                    "position": 2,
-                    "name": "Servicios",
-                    "item": "https://plomeromazatlanpro.mx/#servicios"
-                },
-                {
-                    "@type": "ListItem",
-                    "position": 3,
-                    "name": "Emergencia 24/7",
-                    "item": "https://plomeromazatlanpro.mx/servicios/emergencia-24-7/"
-                }
-            ]
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday"
+          ],
+          "opens": "00:00",
+          "closes": "23:59"
         }
-    ]
+      ],
+      "areaServed": {
+        "@type": "City",
+        "name": "Mazatlán",
+        "addressCountry": "MX"
+      },
+      "sameAs": [
+        "https://www.facebook.com/plomeromazatlanpro",
+        "https://www.instagram.com/plomeromazatlanpro",
+        "https://maps.google.com/?q=Plomero+Mazatlán+Pro"
+      ],
+      "logo": "https://plomeromazatlanpro.mx/logo-plomero-mazatlan-pro.webp",
+      "priceRange": "$$"
+    },
+    {
+      "@type": "Service",
+      "serviceType": "Plomería de Emergencia 24/7",
+      "provider": {
+        "@type": "LocalBusiness",
+        "name": "Plomero Mazatlán Pro",
+        "@id": "https://plomeromazatlanpro.mx",
+        "url": "https://plomeromazatlanpro.mx/servicios/emergencia-24-7/",
+        "telephone": "+526673922273",
+        "priceRange": "$$"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Mazatlán",
+        "containedIn": {
+          "@type": "State",
+          "name": "Sinaloa"
+        }
+      },
+      "availableChannel": {
+        "@type": "ServiceChannel",
+        "serviceUrl": "https://plomeromazatlanpro.mx/servicios/emergencia-24-7/",
+        "servicePhone": {
+          "@type": "ContactPoint",
+          "telephone": "+526673922273",
+          "contactType": "Emergency Service",
+          "areaServed": "Mazatlán",
+          "availableLanguage": "Spanish",
+          "hoursAvailable": {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+              "Sunday"
+            ],
+            "opens": "00:00",
+            "closes": "23:59"
+          }
+        }
+      },
+      "description": "Servicio de plomería de emergencia 24/7 en Mazatlán. Atención inmediata para fugas, destapes, boiler y problemas urgentes. Llegamos en 30-60 minutos."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Realmente atienden emergencias de plomería las 24 horas?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sí, ofrecemos servicio de plomería de emergencia 24/7 en Mazatlán, los 365 días del año. Atendemos madrugadas, fines de semana y días festivos. Nuestro tiempo de respuesta promedio es 30-60 minutos. Contáctanos por WhatsApp al 667 392 2273 o llama al 667 392 2273 para atención inmediata en cualquier momento."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuánto tiempo tardan en llegar en una emergencia?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nuestro tiempo promedio de llegada es 30-60 minutos en colonias como Zona Dorada, Marina Mazatlán, Chapultepec y Centro de Mazatlán. En zonas más alejadas puede tomar 60-90 minutos. Confirmamos el tiempo estimado de llegada al momento de contactarnos. Priorizamos emergencias críticas como fugas de gas o inundaciones activas."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué tipo de emergencias de plomería atienden?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Atendemos todo tipo de emergencias: fugas de agua severas en tuberías o tinaco, fugas de gas con riesgo inmediato, WC desbordándose, drenaje principal tapado, boiler sin agua caliente en invierno, tuberías rotas o congeladas, y cualquier situación que requiera atención inmediata. Llegamos equipados para resolver la emergencia en la primera visita."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuánto cuesta el servicio de emergencia nocturno?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "El servicio de emergencia tiene un cargo base de $500-$800 por visita nocturna (10pm-6am) o días festivos, más el costo de la reparación específica. El diagnóstico está incluido en la visita. Proporcionamos cotización clara antes de iniciar. Los precios son competitivos y justos considerando la urgencia y disponibilidad 24/7."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Necesito hacer cita para una emergencia?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No, las emergencias se atienden inmediatamente sin cita previa. Simplemente contáctanos por WhatsApp al 667 392 2273 o llama directamente. Describe brevemente la emergencia y confirmaremos el tiempo de llegada. Un técnico capacitado se dirigirá a tu ubicación con herramientas y refacciones comunes para resolver el problema lo más rápido posible."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Inicio",
+          "item": "https://plomeromazatlanpro.mx/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Servicios",
+          "item": "https://plomeromazatlanpro.mx/#servicios"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Emergencia 24/7",
+          "item": "https://plomeromazatlanpro.mx/servicios/emergencia-24-7/"
+        }
+      ]
+    }
+  ]
 }
 </script>
 
@@ -671,25 +666,7 @@ window.dataLayer.push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
         </div>
     </section>
 
-    <section class="section section-alt">
-        <div class="container">
-            <h2>Lo que dicen nuestros clientes</h2>
-            <div class="testimonials">
-                <div class="testimonial">
-                    <p>"Llamé a las 2 AM por una fuga enorme en el baño. Llegaron en 40 minutos y resolvieron el mismo día. Muy profesionales."</p>
-                    <cite>— Roberto, Zona Dorada</cite>
-                </div>
-                <div class="testimonial">
-                    <p>"Domingo en la noche, drenaje tapado. Me atendieron por WhatsApp y llegaron rapidísimo. Precio justo y todo impecable."</p>
-                    <cite>— Patricia, Marina Mazatlán</cite>
-                </div>
-                <div class="testimonial">
-                    <p>"Olor a gas en la madrugada. Vinieron de inmediato y encontraron la fuga. Me salvaron de un accidente grave."</p>
-                    <cite>— Luis, Chapultepec</cite>
-                </div>
-            </div>
-        </div>
-    </section>
+    
 
     <section class="section">
         <div class="container">
@@ -723,7 +700,7 @@ window.dataLayer.push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
         <div class="container">
             <h2>Sobre Nosotros</h2>
             <div class="about-content">
-                <p>Con más de 15 años de experiencia en el sector, somos especialistas en soluciones de plomería residencial y comercial con servicio de urgencias 24/7. Nuestro equipo de profesionales certificados está comprometido con brindar un servicio de calidad, puntual y garantizado a cualquier hora del día o la noche.</p>
+                <p>Con más de 15 años de experiencia en el sector, somos especialistas en soluciones de plomería residencial y comercial con servicio de urgencias 24/7. Nuestro equipo de profesionales está comprometido con brindar un servicio de calidad, puntual y garantizado a cualquier hora del día o la noche.</p>
                 <div class="features">
                     <div class="feature">
                         <h3>Experiencia Comprobada</h3>
