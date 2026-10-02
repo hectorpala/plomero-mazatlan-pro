@@ -48,3 +48,6 @@ build/
 .claude/settings.local.json
 *.backup
 *.original
+
+# Reportes de "chécame" con datos del negocio: el repo es público
+reportes-privados/
