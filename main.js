@@ -169,82 +169,8 @@
     updateSubmitButton();
 })();
 
-// Multi-layer lead capture: Netlify Forms + localStorage + GA4 + WhatsApp
-(function() {
-    const form = document.getElementById('contact-form');
-    if (!form) return;
+// El envío del formulario lo maneja /form-whatsapp.js (GitHub Pages no recibe formularios).
 
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-
-        const formData = new FormData(this);
-        const nombre = formData.get('nombre');
-        const telefono = formData.get('telefono');
-        const email = formData.get('email');
-        const mensaje = formData.get('mensaje');
-
-        const leadData = {
-            timestamp: new Date().toISOString(),
-            nombre: nombre,
-            telefono: telefono,
-            email: email,
-            mensaje: mensaje,
-            source: 'homepage_form',
-            url: window.location.href
-        };
-
-        // 1. El lead del formulario lo registra el bloque de medición de cada página
-        //    (listener de submit: generate_lead con metodo=formulario). No duplicar aquí.
-
-        // 2. Store in localStorage as backup (immediate)
-        try {
-            const leads = JSON.parse(localStorage.getItem('plomero_leads') || '[]');
-            leads.push(leadData);
-            localStorage.setItem('plomero_leads', JSON.stringify(leads));
-        } catch (e) {
-            // console.error('Error storing lead in localStorage:', e);
-        }
-
-        // 3. Submit to Netlify Forms (primary backend)
-        try {
-            const response = await fetch('/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams(formData).toString()
-            });
-
-            if (response.ok) {
-                // Success: show thank you and open WhatsApp
-                const whatsappMessage = `Hola! Solicito cotización de servicios de plomería:\n\n` +
-                                      `Nombre: ${nombre}\n` +
-                                      `Teléfono: ${telefono}\n` +
-                                      `Email: ${email}\n` +
-                                      `Mensaje: ${mensaje}`;
-                const whatsappURL = `https://wa.me/526691325300?text=${encodeURIComponent(whatsappMessage)}`;
-
-                // Open WhatsApp in new tab
-                window.open(whatsappURL, '_blank');
-
-                // Redirect to thank you page
-                window.location.href = '/gracias';
-            } else {
-                throw new Error('Netlify form submission failed');
-            }
-        } catch (error) {
-            // console.error('Error submitting to Netlify:', error);
-
-            // Fallback: open WhatsApp directly
-            alert('Formulario enviado. Te redirigiremos a WhatsApp.');
-            const whatsappMessage = `Hola! Solicito cotización de servicios de plomería:\n\n` +
-                                  `Nombre: ${nombre}\n` +
-                                  `Teléfono: ${telefono}\n` +
-                                  `Email: ${email}\n` +
-                                  `Mensaje: ${mensaje}`;
-            const whatsappURL = `https://wa.me/526691325300?text=${encodeURIComponent(whatsappMessage)}`;
-            window.location.href = whatsappURL;
-        }
-    });
-})();
 
 // CTA fijo con tracking (progressive enhancement: funciona sin JS)
 (function(){
