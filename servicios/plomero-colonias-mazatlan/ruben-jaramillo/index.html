@@ -54,6 +54,127 @@ h1{font-size:clamp(2rem,4vw,3rem);margin-bottom:1rem}
 <link rel="stylesheet" href="../../../styles.7f293647.css">
 </head>
 <body>
+<!-- Medición (GTM-KCJ9WXQ9 · GA4 G-J8C9KBFZPR): cargador + contactos/FAQ/velocidad -->
+<script>
+window.dataLayer = window.dataLayer || [];
+window.dataLayer.push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+(function() {
+  // GTM diferido (protege el LCP): carga en la primera interacción o 1.5 s después del load.
+  // El push de 'gtm.js' de arriba es OBLIGATORIO: sin él GA4 no registra la visita.
+  // Sin requestIdleCallback: Safari/iPhone no lo tiene.
+  var loaded = false;
+  var events = ['scroll', 'click', 'touchstart', 'keydown'];
+  var loadGTM = function() {
+    if (loaded) return;
+    loaded = true;
+    events.forEach(function(e) { window.removeEventListener(e, loadGTM, true); });
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-KCJ9WXQ9';
+    document.head.appendChild(s);
+  };
+  events.forEach(function(e) { window.addEventListener(e, loadGTM, {passive: true, capture: true}); });
+  var later = function() { setTimeout(loadGTM, 1500); };
+  if (document.readyState === 'complete') later(); else window.addEventListener('load', later);
+})();
+/* Lead tracking UNIVERSAL: cualquier clic a WhatsApp o telefono, en CUALQUIER pagina
+   (hero, flotantes, inline, paginas de servicio). Empuja generate_lead a dataLayer en el
+   momento del clic (queda en la cola aunque GTM cargue diferido). Listener delegado en captura. */
+(function() {
+  // Dónde está el botón: permite comparar qué CTA convierte (flotante vs hero vs cuerpo...).
+  function ubicacion(el) {
+    if (el.closest('.floating-btn, .floating-whatsapp, .floating-call')) return 'flotante';
+    if (el.closest('[class*="exit-intent"], [id*="exit-intent"]')) return 'exit_intent';
+    if (el.closest('nav')) return 'menu';
+    if (el.closest('header, .hero, #inicio')) return 'hero';
+    if (el.closest('footer')) return 'footer';
+    if (el.closest('article')) return 'articulo';
+    var sec = el.closest('section[id]');
+    return sec ? sec.id : 'cuerpo';
+  }
+  function lead(datos) {
+    try {
+      window.dataLayer = window.dataLayer || [];
+      datos.event = 'generate_lead';
+      datos.page = location.pathname;
+      window.dataLayer.push(datos);
+    } catch (err) {}
+  }
+  document.addEventListener('click', function(e) {
+    var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a) return;
+    var href = a.getAttribute('href') || '';
+    var metodo = (href.indexOf('wa.me') !== -1 || href.indexOf('api.whatsapp') !== -1) ? 'whatsapp'
+               : (href.indexOf('tel:') === 0) ? 'llamada' : null;
+    if (!metodo) return;
+    lead({ metodo: metodo, ubicacion: ubicacion(a) });
+  }, true);
+  // Formularios: el evento submit solo llega si pasó la validación del navegador.
+  document.addEventListener('submit', function(e) {
+    var f = e.target;
+    if (!f || f.tagName !== 'FORM') return;
+    lead({ metodo: 'formulario', ubicacion: ubicacion(f),
+           form_name: f.getAttribute('name') || f.id || 'sin_nombre' });
+  }, true);
+})();
+/* FAQ: qué preguntas abre la gente (= dudas reales que conviene responder arriba). */
+(function() {
+  function push(texto) {
+    try {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'faq_open', pregunta: (texto || '').trim().slice(0, 100) });
+    } catch (err) {}
+  }
+  document.addEventListener('toggle', function(e) {
+    var d = e.target;
+    if (!d || d.tagName !== 'DETAILS' || !d.open) return;
+    var s = d.querySelector('summary');
+    push(s && s.textContent);
+  }, true);
+  document.addEventListener('click', function(e) {
+    var b = e.target && e.target.closest ? e.target.closest('.faq-question') : null;
+    if (!b || b.tagName === 'SUMMARY' || b.getAttribute('aria-expanded') === 'true') return;
+    push(b.textContent);
+  }, true);
+})();
+/* Core Web Vitals de visitantes REALES (LCP, CLS, INP), enviados una vez al ocultar la página. */
+(function() {
+  if (!('PerformanceObserver' in window)) return;
+  var lcp = 0, cls = 0, inp = 0, enviado = false;
+  var ventana = 0, ini = 0, ult = 0; // CLS = peor ventana (≤5 s, huecos <1 s), como Google
+  function obs(tipo, fn, extra) {
+    try {
+      var o = { type: tipo, buffered: true };
+      for (var k in extra) o[k] = extra[k];
+      new PerformanceObserver(function(l) { l.getEntries().forEach(fn); }).observe(o);
+    } catch (err) {}
+  }
+  obs('largest-contentful-paint', function(en) { lcp = en.startTime; });
+  obs('layout-shift', function(en) {
+    if (en.hadRecentInput) return;
+    if (ventana && en.startTime - ult < 1000 && en.startTime - ini < 5000) ventana += en.value;
+    else { ventana = en.value; ini = en.startTime; }
+    ult = en.startTime;
+    if (ventana > cls) cls = ventana;
+  });
+  obs('event', function(en) { if (en.interactionId && en.duration > inp) inp = en.duration; },
+      { durationThreshold: 40 });
+  function nota(v, bueno, malo) { return v <= bueno ? 'bueno' : v <= malo ? 'mejorable' : 'malo'; }
+  function enviar(forzar) {
+    if (enviado || (!forzar && document.visibilityState !== 'hidden')) return;
+    enviado = true;
+    var dl = window.dataLayer = window.dataLayer || [];
+    if (lcp) dl.push({ event: 'web_vital', metrica: 'LCP', valor: Math.round(lcp), rating: nota(lcp, 2500, 4000) });
+    dl.push({ event: 'web_vital', metrica: 'CLS', valor: Math.round(cls * 1000) / 1000, rating: nota(cls, 0.1, 0.25) });
+    if (inp) dl.push({ event: 'web_vital', metrica: 'INP', valor: Math.round(inp), rating: nota(inp, 200, 500) });
+  }
+  document.addEventListener('visibilitychange', enviar);
+  window.addEventListener('pagehide', function() { enviar(true); });
+})();
+</script>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KCJ9WXQ9" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- /Medición -->
+
 <nav class="nav"><div class="container"><div class="nav-wrapper"><a href="/" class="logo"><img src="../../../assets/images/logo-512.webp" alt="Plomero Mazatlán Pro" width="140" height="70"></a><button class="mobile-menu-btn" aria-label="Menu"><span></span><span></span><span></span></button><ul class="nav-menu"><li><a href="/" class="nav-link">Inicio</a></li><li><a href="/#servicios" class="nav-link">Servicios</a></li><li><a href="/#contacto" class="nav-link">Contacto</a></li></ul></div></div></nav>
 <header class="hero"><picture class="hero-background"><source type="image/webp" srcset="../../../assets/images/hero-plomero-visita-500w.webp 500w, ../../../assets/images/hero-plomero-visita-800w.webp 800w, ../../../assets/images/hero-plomero-visita-1200w.webp 1200w" sizes="100vw"><img src="../../../assets/images/hero-plomero-visita-800w.webp" alt="Plomero en Ruben Jaramillo" width="800" height="533" loading="eager" fetchpriority="high"></picture><div class="container"><div class="hero-content"><div class="hero-eta-badge"><span class="eta-dot"></span><span>Llegamos en 20-30 min a Ruben Jaramillo</span></div><h1>Plomero en Ruben Jaramillo – Emergencias 24/7</h1><div class="hero-rating"><span class="rating-stars">★★★★★</span><span>4.8/5</span><span>· 150+ reseñas</span></div><p class="hero-subtitle">Plomero certificado en Ruben Jaramillo, Mazatlán. Emergencia 24/7 con garantía escrita.</p><a href="#contacto" class="btn-primary">Solicitar Atención Inmediata</a></div></div></header>
 <main>

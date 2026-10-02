@@ -43,8 +43,8 @@ jobs:
             html="$(curl -sS "$BASE$u")" || FAIL=1
 
             # 1) GTM: exactamente 1 gtm.js y 1 ns.html
-            js=$(printf "%s" "$html" | rg -c 'googletagmanager\.com/gtm\.js\?id=GTM-W75CRTX5')
-            ns=$(printf "%s" "$html" | rg -c 'googletagmanager\.com/ns\.html\?id=GTM-W75CRTX5')
+            js=$(printf "%s" "$html" | rg -c 'googletagmanager\.com/gtm\.js\?id=GTM-KCJ9WXQ9')
+            ns=$(printf "%s" "$html" | rg -c 'googletagmanager\.com/ns\.html\?id=GTM-KCJ9WXQ9')
             echo "GTM gtm.js:$js ns.html:$ns"
             [ "$js" -eq 1 ] && [ "$ns" -eq 1 ] || { echo "❌ GTM count mismatch in $u"; FAIL=1; }
 

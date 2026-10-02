@@ -193,16 +193,8 @@
             url: window.location.href
         };
 
-        // 1. Track lead in GA4 via GTM dataLayer (immediate)
-        if (window.dataLayer) {
-            window.dataLayer.push({
-                'event': 'generate_lead',
-                'form_name': 'contact_form_homepage',
-                'method': 'netlify_forms',
-                'value': 1,
-                'currency': 'MXN'
-            });
-        }
+        // 1. El lead del formulario lo registra el bloque de medición de cada página
+        //    (listener de submit: generate_lead con metodo=formulario). No duplicar aquí.
 
         // 2. Store in localStorage as backup (immediate)
         try {
@@ -357,7 +349,7 @@
 });
 
 // Exit-Intent Popup - versión simplificada (móvil: back button, desktop: mouseleave)
-(typeof requestIdleCallback === 'function' ? requestIdleCallback : setTimeout)(function() {
+setTimeout(function() { // antes requestIdleCallback(fn, 2500): truena en Chrome (2º arg debe ser objeto)
     var popup = document.getElementById('exit-intent-popup');
     if (!popup) return;
 
